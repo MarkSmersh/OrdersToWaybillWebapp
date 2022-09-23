@@ -1,7 +1,7 @@
 <template>
     <div class="formContainer">
         <label>{{placeholder}}</label>
-        <form>
+        <form @submit.prevent>
             <input v-bind:type="type" v-bind:value="data" @input="syncInput">
             <button v-bind:color="buttonColor">{{buttonText}}</button>
         </form>
@@ -42,11 +42,12 @@ export default defineComponent({
         width: 400px;
         display: flex;
         justify-content: space-between;
-        margin-top: 10px;
+        margin-top: 5px;
     }
 
     label {
         margin-left: var(--default-border-radius);
+        font-weight: 700;
     }
 
     input {
@@ -55,6 +56,8 @@ export default defineComponent({
         padding-left: var(--default-border-radius);
         padding-right: var(--default-border-radius);
         width: 100%;
+        font-size: 16px;
+        font-weight: 500;
     }
 
     button {
@@ -63,7 +66,7 @@ export default defineComponent({
         cursor: pointer;
         background-color: var(--button_color);
         color: var(--button_text_color);
-        padding: 0px 20px;
+        padding: 0px 30px;
         font-size: 16px;
         font-weight: 600;
     }

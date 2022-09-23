@@ -5,7 +5,7 @@
     </div>
 </template>
 
-<script lang="ts">
+<script>
 
 import { defineComponent } from 'vue';
 
@@ -20,6 +20,9 @@ export default defineComponent({
     .formTitle {
         font-weight: 900;
         font-size: 20px;
-        margin-bottom: 20px;
+    }
+
+    .form > * {
+        margin-top: 20px;
     }
 </style>
