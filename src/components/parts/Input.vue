@@ -64,8 +64,8 @@ export default defineComponent({
         border: 0;
         border-radius: var(--default-border-radius);
         cursor: pointer;
-        background-color: var(--button_color);
-        color: var(--button_text_color);
+        background-color: var(--button-color);
+        color: var(--button-text-color);
         padding: 0px 30px;
         font-size: 16px;
         font-weight: 600;
