@@ -2,7 +2,7 @@
         <div class="selectContainer">
             <label>{{title}}</label>
             <div class="selectedContainer" v-bind:class="{ active: isActived }">
-                <input class="nameInput" v-bind:value="value" @click="changeState(e)" @input="filterByName($event.target.value)">
+                <input class="nameInput" v-bind:value="value" @focusin="changeState()" @input="filterByName($event.target.value)">
                 <p class="sign" v-bind:class="{ active: isActived }">></p>
             </div>
             <ul class="options" v-bind:class="{ active: isActived }" >
@@ -20,12 +20,13 @@ import { defineComponent } from 'vue';
 export default defineComponent({
     props: {
         title: String,
-        options: Array // {id: number, name: string, description?: string}
+        options: Array, // { id: number, name: string, description?: string }
+        enterSelected: Object,
     },
     data() {
         return {
-            selected: this.options[0],
-            value: this.options[0].name,
+            selected: this.enterSelected,
+            value: this.enterSelected.name,
             filtered: this.options,
             isActived: false
         }

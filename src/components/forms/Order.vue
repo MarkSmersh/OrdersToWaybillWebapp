@@ -1,5 +1,5 @@
 <template>
-    <Form v-bind:title="title">
+    <Form title="Order">
         <div class="basket" v-if="basket.length != 0">
             <ul>
                 <li class="product" v-for="product in basket">
@@ -53,7 +53,6 @@ export default defineComponent({
         Form
     },
     props: {
-        title: String,
         products: Array // { id: number, name: string, type: string, packaging: number[], unit: string, img: string, isOpened: boolean  }
     },
     data() {
@@ -99,7 +98,7 @@ export default defineComponent({
 })
 </script>
 
-<style>
+<style scoped>
     .basket {
         overflow-y: auto;
         padding-bottom: 20px;

@@ -31,4 +31,8 @@ export default defineComponent({
     .form > *:last-child {
         margin-bottom: 0;
     }
+
+    .form {
+        margin-bottom: 50px;
+    }
 </style>

@@ -2,13 +2,13 @@
     <div class="formContainer">
         <label>{{placeholder}}</label>
         <form @submit.prevent>
-            <input v-bind:type="type" v-bind:value="data" @input="syncInput">
-            <button v-bind:color="buttonColor">{{buttonText}}</button>
+            <input v-bind:type="type" v-bind:value="inputData" @input="isEdit($event)">
+            <button v-bind:class="{ edited: isEdited }" @click="applyInput()">{{buttonText}}</button>
         </form>
     </div>
 </template>
 
-<script lang="ts">
+<script>
 
 import { defineComponent } from 'vue';
 
@@ -16,18 +16,36 @@ export default defineComponent({
     props: {
         placeholder: String,
         buttonText: String,
-        type: String
+        type: String,
+        enterData: String,
     },
     data() {
         return {
-            data: "",
-            buttonColor: ""
+            data: this.enterData,
+            inputData: this.enterData,
+            isEdited: false,
         }
     },
     methods: {
-        syncInput(event: any) {
-            this.data = event.target.value as string
+        applyInput() {
+            if (this.isEdited) {
+                this.data = this.inputData;
+                this.isEdited = false;
+            }
         },
+        isEdit(e) {
+            this.inputData = e.target.value
+
+            if (e.target.value.trimStart() == "") { 
+                this.isEdited = false;
+                return;
+            }
+            if (e.target.value == this.data) {
+                this.isEdited = false;
+                return;
+            }
+            if (!this.isEdited) this.isEdited = true;
+        }
     }
 })
 
@@ -63,15 +81,21 @@ export default defineComponent({
     button {
         border: 0;
         border-radius: var(--default-border-radius);
-        cursor: pointer;
-        background-color: var(--button-color);
+        background-color: var(--hint-color);
         color: var(--button-text-color);
         padding: 0px 30px;
         font-size: 1em;
         font-weight: 600;
+        transition: 0.5s;
     }
 
     input:focus{
         outline: none;
+    }
+
+    button.edited {
+        background-color: var(--button-color);
+        color: var(--button-text-color);
+        cursor: pointer;
     }
 </style>
