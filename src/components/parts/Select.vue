@@ -2,7 +2,7 @@
         <div class="selectContainer">
             <label>{{title}}</label>
             <div class="selectedContainer" v-bind:class="{ active: isActived }">
-                <input class="nameInput" v-bind:value="value" @focus="changeState" @input="filterByName($event.target.value)">
+                <input class="nameInput" v-bind:value="value" @click="changeState(e)" @input="filterByName($event.target.value)">
                 <p class="sign" v-bind:class="{ active: isActived }">></p>
             </div>
             <ul class="options" v-bind:class="{ active: isActived }" >
@@ -62,19 +62,18 @@ export default defineComponent({
     }
 
     .selectContainer p {
-        font-size: 16px;
+        font-size: 1em;
         font-weight: 500;
     }
 
     label {
         margin-left: var(--default-border-radius);
-        font-size: 16px;
+        font-size: 1em;
         font-weight: 700;
         margin-bottom: 5px;
     }
 
     .selectedContainer, .options {
-        width: 400px;
         background-color: var(--bg-color);
         border-radius: var(--default-border-radius);
         min-height: 50px;
@@ -97,7 +96,7 @@ export default defineComponent({
         min-height: calc(50px - calc(var(--default-border-radius) * 2));;
         max-height: 250px;
         padding: var(--default-border-radius);
-        width: calc(400px - calc(var(--default-border-radius) * 2));
+        width: calc(100% - calc(var(--default-border-radius) * 2));
     }
 
     .options::-webkit-scrollbar {
@@ -136,7 +135,7 @@ export default defineComponent({
         border-radius: var(--default-border-radius);
         border: 0;
         padding-left: var(--default-border-radius);
-        font-size: 16px;
+        font-size: 1em;
         font-weight: 500;
         color: var(--text-color);
     }

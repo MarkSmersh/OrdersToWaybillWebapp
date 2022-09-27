@@ -19,10 +19,16 @@ export default defineComponent({
 <style>
     .formTitle {
         font-weight: 900;
-        font-size: 20px;
+        font-size: 2em;
+        text-align: center;
+        margin-bottom: 30px;
     }
 
     .form > * {
-        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+
+    .form > *:last-child {
+        margin-bottom: 0;
     }
 </style>

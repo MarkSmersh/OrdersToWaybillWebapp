@@ -39,7 +39,7 @@ export default defineComponent({
         border: 0;
         border-radius: var(--default-border-radius);
         height: 50px;
-        width: 400px;
+        width: 100%;
         display: flex;
         justify-content: space-between;
         margin-top: 5px;
@@ -56,7 +56,7 @@ export default defineComponent({
         padding-left: var(--default-border-radius);
         padding-right: var(--default-border-radius);
         width: 100%;
-        font-size: 16px;
+        font-size: 1em;
         font-weight: 500;
     }
 
@@ -67,7 +67,7 @@ export default defineComponent({
         background-color: var(--button-color);
         color: var(--button-text-color);
         padding: 0px 30px;
-        font-size: 16px;
+        font-size: 1em;
         font-weight: 600;
     }
 
