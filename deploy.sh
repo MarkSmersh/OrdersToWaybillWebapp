@@ -22,4 +22,4 @@ git push -f git@github.com:MarkSmersh/MarkSmersh.github.io.git master
 # if you are deploying to https://<USERNAME>.github.io/<REPO>
 # git push -f git@github.com:<USERNAME>/<REPO>.git main:gh-pages
 
-cd -
+cd -y
