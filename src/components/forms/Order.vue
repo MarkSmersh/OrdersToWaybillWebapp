@@ -142,7 +142,7 @@ export default defineComponent({
 
     @media screen and (min-width: 1200px) {
         .basket .product {
-            width: calc(10vw - calc(var(--default-border-radius) * 2));
+            min-width: calc(10vw - calc(var(--default-border-radius) * 2));
         }
     }
 
