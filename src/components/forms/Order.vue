@@ -119,11 +119,11 @@ export default defineComponent({
     }
 
     .basket::-webkit-scrollbar-thumb {
-        background: var(--button-color);
+        background: var(--tg-theme-button-color);
     }
 
     .basket::-webkit-scrollbar-thumb:hover {
-        background: var(--button-color);
+        background: var(--tg-theme-button-color);
     } 
 
     .basket > ul, .choice > ul {
@@ -132,7 +132,7 @@ export default defineComponent({
     }
 
     .basket .product {
-        background-color: var(--bg-color);
+        background-color: var(--tg-theme-bg-color);
         min-width: calc(50vw - calc(var(--default-border-radius) * 2) - 20px);
         min-height: calc(100px - calc(var(--default-border-radius) * 2));
         border-radius: var(--default-border-radius);
@@ -161,13 +161,13 @@ export default defineComponent({
     }
 
     .basket .product button {
-        background-color: var(--button-color);
+        background-color: var(--tg-theme-button-color);
         border: 0;
         height: 40px;
         width: 40px;
         border-radius: 40px;
         float: right;
-        color: var(--button-text-color);
+        color: var(--tg-theme-button-text-color);
         cursor: pointer;
     }
 
@@ -201,7 +201,7 @@ export default defineComponent({
     }
 
     .filter .filters {
-        background-color: var(--bg-color);
+        background-color: var(--tg-theme-bg-color);
         display: flex;
         flex-direction: column;
         width: 100%;
@@ -213,7 +213,7 @@ export default defineComponent({
 
     .filter .filters li {
         padding: calc(var(--default-border-radius) / 2);
-        color: var(--link-color);
+        color: var(--tg-theme-link-color);
     }
 
     .filter .filters li:hover {
@@ -240,11 +240,11 @@ export default defineComponent({
     }
 
     .choice::-webkit-scrollbar-thumb {
-        background: var(--button-color);
+        background: var(--tg-theme-button-color);
     }
 
     .choice::-webkit-scrollbar-thumb:hover {
-        background: var(--button-color);
+        background: var(--tg-theme-button-color);
     } 
 
     .choice > ul {
@@ -256,7 +256,7 @@ export default defineComponent({
     }
 
     .product .preview {
-        background-color: var(--bg-color);
+        background-color: var(--tg-theme-bg-color);
         border-radius: var(--default-border-radius);
         padding: var(--default-border-radius);
         height: 200px;
@@ -306,7 +306,7 @@ export default defineComponent({
 
     .product > ul.active {
         width: 100%;
-        background-color: var(--button-color);
+        background-color: var(--tg-theme-button-color);
     }
 
     .product > ul > .unit {
@@ -314,7 +314,7 @@ export default defineComponent({
         display: none;
         justify-content: space-between;
         align-items: center;
-        color: var(--button-text-color);
+        color: var(--tg-theme-button-text-color);
         margin-bottom: 10px;
     }
 
@@ -325,7 +325,7 @@ export default defineComponent({
     .product > ul > .unit button {
         height: 40px;
         width: 40px;
-        background-color: var(--button-text-color);
+        background-color: var(--tg-theme-button-text-color);
         border: 0;
         border-radius: calc(var(--default-border-radius) * 2);
         font-size: 1.25em;
@@ -333,8 +333,8 @@ export default defineComponent({
     }
 
     .product > ul > button {
-        background-color: var(--button-color);
-        color: var(--button-text-color);
+        background-color: var(--tg-theme-button-color);
+        color: var(--tg-theme-button-text-color);
         font-size: 1em;
         font-weight: 700;
         border: 0;
@@ -350,8 +350,8 @@ export default defineComponent({
     .product > ul > button.active {
         width: 100%;
         transform: translateY(0%);
-        background-color: var(--button-text-color);
-        color: var(--button-color);
+        background-color: var(--tg-theme-button-text-color);
+        color: var(--tg-theme-button-color);
     }
 
 </style>

@@ -35,7 +35,7 @@ export default defineComponent ({
     .text-box {
         padding-left: var(--default-border-radius);
         padding-right: var(--default-border-radius);
-        background-color: var(--bg-color);
+        background-color: var(--tg-theme-bg-color);
         border: 0;
         border-radius: var(--default-border-radius);
         height: 50px;
@@ -46,10 +46,10 @@ export default defineComponent ({
     }
 
     button {
-        background-color: var(--button-color);
+        background-color: var(--tg-theme-button-color);
         border: 0;
         border-radius: var(--default-border-radius);
-        color: var(--button-text-color);
+        color: var(--tg-theme-button-text-color);
         padding: 0px 30px;
         font-size: 1em;
         font-weight: 600;

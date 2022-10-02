@@ -75,7 +75,7 @@ export default defineComponent({
     }
 
     .selectedContainer, .options {
-        background-color: var(--bg-color);
+        background-color: var(--tg-theme-bg-color);
         border-radius: var(--default-border-radius);
         min-height: 50px;
         /* padding: var(--default-border-radius); */
@@ -110,11 +110,11 @@ export default defineComponent({
     }
 
     .options::-webkit-scrollbar-thumb {
-        background: var(--button-color);
+        background: var(--tg-theme-button-color);
     }
 
     .options::-webkit-scrollbar-thumb:hover {
-        background: var(--button-color);
+        background: var(--tg-theme-button-color);
     }   
 
     .options > li {
@@ -126,11 +126,11 @@ export default defineComponent({
     }
 
     .name {
-        color: var(--link-color);
+        color: var(--tg-theme-link-color);
     }
 
     .nameInput {
-        color: var(--text-color);
+        color: var(--tg-theme-text-color);
         width: 100%;
         min-height: calc(50px - 4px);
         border-radius: var(--default-border-radius);
@@ -138,7 +138,7 @@ export default defineComponent({
         padding-left: var(--default-border-radius);
         font-size: 1em;
         font-weight: 500;
-        color: var(--text-color);
+        color: var(--tg-theme-text-color);
     }
 
     .nameInput:focus {
@@ -146,7 +146,7 @@ export default defineComponent({
     }
 
     .description {
-        color: var(--hint-color);
+        color: var(--tg-theme-hint-color);
     }
 
     .options.active {
@@ -154,7 +154,7 @@ export default defineComponent({
     }
 
     .selectedContainer.active {
-        box-shadow: var(--button-color) 0px 0px 0px 2px;
+        box-shadow: var(--tg-theme-button-color) 0px 0px 0px 2px;
     }
 
     .sign {

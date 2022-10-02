@@ -53,7 +53,7 @@ export default defineComponent({
 
 <style scoped>
     form {
-        background-color: var(--bg-color);
+        background-color: var(--tg-theme-bg-color);
         border: 0;
         border-radius: var(--default-border-radius);
         height: 50px;
@@ -81,8 +81,8 @@ export default defineComponent({
     button {
         border: 0;
         border-radius: var(--default-border-radius);
-        background-color: var(--hint-color);
-        color: var(--button-text-color);
+        background-color: var(--tg-theme-hint-color);
+        color: var(--tg-theme-button-text-color);
         padding: 0px 30px;
         font-size: 1em;
         font-weight: 600;
@@ -94,8 +94,8 @@ export default defineComponent({
     }
 
     button.edited {
-        background-color: var(--button-color);
-        color: var(--button-text-color);
+        background-color: var(--tg-theme-button-color);
+        color: var(--tg-theme-button-text-color);
         cursor: pointer;
     }
 </style>
