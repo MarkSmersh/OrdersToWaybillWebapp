@@ -1,7 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router"
 import Main from "../pages/Main.vue"
 
-
 const routes = [
     {
         path: "/create",

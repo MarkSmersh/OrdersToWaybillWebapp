@@ -53,13 +53,15 @@ export default defineComponent({
         Form
     },
     props: {
-        products: Array // { id: number, name: string, type: string, packaging: number[], unit: string, img: string, isOpened: boolean  }
+        products: Array, // { id: number, name: string, type: string, packaging: number[], unit: string, img: string, isOpened: boolean  }
+        enterBasket: Array
     },
     data() {
         return {
-            basket: [], // [ { name: string, packaging: number, unit: string } ]
-            filtered: this.products,
+            basket: this.enterBasket || [], // [ { name: string, packaging: number, unit: string } ]
+            filtered: this.products || [],
             filters: (() => {
+                if (!this.products) return;
                 let result = [];
                 this.products.forEach((prod) => {
                     if (!result.includes(prod.type)) result.push(prod.type)

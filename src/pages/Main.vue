@@ -1,16 +1,22 @@
 <template>
-    <Link name="order">
-      <Order v-bind:products="option3"></Order>
-    </Link>
-    <Link name="costumer-data">
-      <CostumerData v-bind:enter-data="option4"></CostumerData>
-    </Link>
-    <Link>
-      <MailData v-bind:enter-data="options"></MailData>
-    </Link>
-    <Link>
-      <BillingData v-bind:enter-data="options2"></BillingData>
-    </Link>
+    <div v-if="status === 200">
+      <Link v-if="data.orderData" name="order">
+        <Order :products="data.orderData.data" :enter-basket="data.orderData.basket"></Order>
+      </Link>
+      <Link v-if="data.costumerData" name="costumer-data">
+        <CostumerData :enter-data="data.costumerData"></CostumerData>
+      </Link>
+      <Link v-if="data.mailData" name="mail-data">
+        <MailData :enter-data="data.mailData"></MailData>
+      </Link>
+      <Link v-if="data.billingData" name="billing-data">
+        <BillingData :enter-data="data.billingData"></BillingData>
+      </Link>
+    </div>
+    <div v-else>
+      <p>Status code: {{status}}</p>
+      <p>Description: {{response}}</p>
+    </div>
   </template>
   
   <script>
@@ -20,48 +26,153 @@
   import MailData from "@/components/forms/MailData.vue";
   import BillingData from "@/components/forms/BillingData.vue";
   import TextBox from "@/components/parts/TextBox.vue";
-  
+  import axios from "axios";
+  import warehouseTypeToString from "../utils/warehouseTypeToString";
   
   export default {
     components: {
       Order, CostumerData, Link, MailData, BillingData, TextBox
     },
+    async mounted() {
+      if (this.$route.path === "/create") {
+        if (!token) {
+          this.emitError(400, "Option token is missing, but required");
+        }
+      }
+
+      if (this.$route.path === "/edit") {
+        let { token, orderData, costumerData, mailData, billingData } = this.$route.query;
+        console.log(token);
+        if (!token) {
+          this.emitError(400, "Option token is missing, but required");
+        }
+
+        if (orderData) {
+          orderData = JSON.parse(orderData);
+          let data = []
+          console.log(orderData);
+          orderData.data.forEach((prd, i) => {
+            data.push({
+              id: i,
+              name: prd.name,
+              type: prd.type,
+              packaging: prd.packaging,
+              unit: prd.unit,
+              img: prd.img,
+              isOpened: false
+            })
+          })
+
+          let basket = []
+          orderData.basket.forEach((prd) => {
+            let product = data.find((product) => product.id == prd.id);
+            basket.push({
+              name: product.name,
+              packaging: prd.packaging,
+              unit: product.unit
+            })
+          })
+
+          this.data.orderData = {
+            data: data,
+            basket: basket
+          }
+        }
+
+        if (costumerData) {
+          costumerData = JSON.parse(costumerData);
+          this.data.costumerData = costumerData;
+        }
+
+        if (mailData) {
+          mailData = JSON.parse(mailData);
+
+          let responseSettlement = (await this.requestToNP(
+            token, "Address", "getSettlements", {
+              "Ref": mailData.settlement.selected
+          }))[0]
+          console.log(responseSettlement.AreaDescription);
+          let settlement = { data: [], selected: {
+            id: responseSettlement.Ref,
+            name: `${responseSettlement.SettlementTypeDescription} ${responseSettlement.Description}`,
+            description:
+              `${responseSettlement.AreaDescription}, ${responseSettlement.RegionsDescription}`
+          }};
+
+          let responseWarehouse = (await this.requestToNP(
+            token, "Address", "getWarehouses", {
+              "Ref": mailData.destination.selected
+          }))[0]
+          console.log(responseWarehouse);
+          let destination = { data: [], selected: {
+            id: responseWarehouse.Ref,
+            name: `${warehouseTypeToString(responseWarehouse.TypeOfWarehouse)} №${responseWarehouse.Number}`,
+            description: responseWarehouse.ShortAddress
+          }};
+
+          this.data.mailData = {
+            settlement: settlement,
+            destination: destination
+          }
+        }
+
+        if (billingData) {
+          billingData = JSON.parse(billingData);
+
+          function fromRawData (raw) {
+            let data = [];
+            raw.data.forEach((d, i) => {
+              data.push({
+                id: i,
+                name: d
+              })
+            })
+
+            let selectData = data.find((v) => v.id == raw.selected);
+            
+            console.log(selectData);
+            let selected = {
+              id: selectData.id,
+              name: selectData.name
+            }
+
+            return {
+              data: data,
+              selected: selected
+            }
+          }
+          
+          this.data.billingData = {
+            type: fromRawData(billingData.type),
+            whoPays: fromRawData(billingData.whoPays),
+            price: billingData.price
+          }
+
+          console.log(this.data.billingData);
+        }
+      }      
+    },
     data() {
       return {
-        options: { destination: 
-          (() => {
-            let result = { data: [], selected: { id: 0, name: `м. Львів 0`, description: `вул. Степана Бандерьі і Шухевича, 0`} }
-  
-            for (let i = 1; i < 200; i++) {
-              result.data.push({ id: i, name: `м. Львів ${i}`, description: `вул. Степана Бандерьі і Шухевича, ${i}`})
+        data: {},
+        async requestToNP(token, modelName, calledMethod, data) {
+          return (await axios.request({
+            url: "https://api.novaposhta.ua/v2.0/json/",
+            method: "post",
+            data: {
+              apiKey: token,
+              modelName: modelName,
+              calledMethod: calledMethod,
+              methodProperties: data
             }
-  
-            console.log(result);
-  
-            return result;
-          })(),
-          scanSheet: "0000-0000-0000-0000"
+          })).data.data
         },
-        options2: {
-          price: "300",
-          type: { data: [{ id: 1, name: "Cash" }, { id: 2, name: "Non cash" }], selected: { id: 2, name: "Non cash" }},
-          whoPays: { data: [{ id: 1, name: "Sender" }, { id: 2, name: "Recipient" }], selected: { id: 2, name: "Recipient" }}
+        emitError(code, err) {
+          this.status = code;
+          this.response = err;
         },
-        option3: [
-          { id: 0, name: "Amylosubtilin", type: "Ferments", packaging: [100, 250, 500, 1000], unit: "ml", img: "https://cdn-icons-png.flaticon.com/512/1748/1748107.png", isOpened: false },
-          { id: 1, name: "Glucavamorin", type: "Ferments", packaging: [100, 250, 500, 1000, 1500, 2000], unit: "ml", img: "https://cdn-icons-png.flaticon.com/512/1748/1748107.png", isOpened: false },
-          { id: 2, name: "Yeast", type: "Yeasts", packaging: [100, 250, 500, 1000], unit: "g", img: "https://cdn-icons-png.flaticon.com/512/6411/6411176.png", isOpened: false },
-          { id: 3, name: "Yeast1", type: "Yeasts", packaging: [100, 250, 500, 1000], unit: "g", img: "https://cdn-icons-png.flaticon.com/512/6411/6411176.png", isOpened: false },
-          { id: 4, name: "Yeast2", type: "Yeasts", packaging: [100, 250, 500, 1000], unit: "g", img: "https://cdn-icons-png.flaticon.com/512/6411/6411176.png", isOpened: false },
-          { id: 5, name: "Yeast3", type: "Yeasts", packaging: [100, 250, 500, 1000], unit: "g", img: "https://cdn-icons-png.flaticon.com/512/6411/6411176.png", isOpened: false },
-          { id: 6, name: "Yeast4", type: "Yeasts", packaging: [100, 250, 500, 1000], unit: "g", img: "https://cdn-icons-png.flaticon.com/512/6411/6411176.png", isOpened: false },
-          { id: 7, name: "Yeast5", type: "Yeasts", packaging: [100, 250, 500, 1000], unit: "g", img: "https://cdn-icons-png.flaticon.com/512/6411/6411176.png", isOpened: false },
-          { id: 8, name: "Yeast6", type: "Yeasts", packaging: [100, 250, 500, 1000], unit: "g", img: "https://cdn-icons-png.flaticon.com/512/6411/6411176.png", isOpened: false },
-        ],
-        option4: {
-          phoneNumber: "+38123456789", lastName: "", firstName: "Ivan", middleName: "Ivanovich" 
-        },
-        func: () => {}
+        status: 200,
+        response: ""
       }
     }
   }
