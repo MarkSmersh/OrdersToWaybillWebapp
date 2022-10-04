@@ -2,7 +2,10 @@
         <div class="selectContainer">
             <label>{{title}}</label>
             <div class="selectedContainer" v-bind:class="{ active: isActived }">
-                <input class="nameInput" v-bind:value="value" @focusin="changeState()" @input="filterByName($event.target.value)">
+                <input class="nameInput"
+                       :value="value"
+                       @focusin="changeState()"
+                       @input="(onInput) ? Input($event.target.value) : filterByName($event.target.value)">
                 <p class="sign" v-bind:class="{ active: isActived }">></p>
             </div>
             <ul class="options" v-bind:class="{ active: isActived }" >
@@ -22,14 +25,27 @@ export default defineComponent({
         title: String,
         options: Array, // { id: number, name: string, description?: string }
         enterSelected: Object,
+        onInput: Function,
+        // enterFilter: String, // e.g. settlementRef 
+        // onFilter: Function,
     },
     data() {
         return {
             selected: this.enterSelected,
             value: this.enterSelected.name,
             filtered: this.options,
+            filter: this.filter,
             isActived: false
         }
+    },
+    watch: {
+        options(newOptions) {
+            this.filtered = newOptions;
+        }
+        // async filter(newFilter) {
+        //     this.filtered = await this.onFilter(newFilter);
+        //     this.filter = newFilter;
+        // }
     },
     methods: {
         changeState () {
@@ -38,6 +54,7 @@ export default defineComponent({
         applyOption (e) {
             this.selected = e;
             this.value = e.name;
+            this.$emit("update", this.value);
             this.changeState();
         },
         filterByName (val) {
@@ -50,7 +67,10 @@ export default defineComponent({
             })
         
             this.filtered = [...filtered]
-        }
+        },
+        async Input(e) {
+            this.filtered = await this.onInput(e);
+        },
     }
 })
 

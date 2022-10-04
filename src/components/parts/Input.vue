@@ -30,11 +30,12 @@ export default defineComponent({
         applyInput() {
             if (this.isEdited) {
                 this.data = this.inputData;
+                this.$emit("update", this.data);
                 this.isEdited = false;
             }
         },
         isEdit(e) {
-            this.inputData = e.target.value
+            this.inputData = e.target.value;
 
             if (e.target.value.trimStart() == "") { 
                 this.isEdited = false;
