@@ -30,7 +30,7 @@ export default defineComponent({
         applyInput() {
             if (this.isEdited) {
                 this.data = this.inputData;
-                this.$emit("update", this.data);
+                this.$emit("update", this.data, this.placeholder);
                 this.isEdited = false;
             }
         },

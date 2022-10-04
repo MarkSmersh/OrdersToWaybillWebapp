@@ -1,8 +1,18 @@
 <template>
     <Form title="Billing data">
-        <Input placeholder="Price" v-bind:enter-data="enterData.string" button-text="₴" type="number"></Input>
-        <Select title="Type" v-bind:options="enterData.type.data" v-bind:enter-selected="enterData.type.selected"></Select>
-        <Select title="Who pays" v-bind:options="enterData.whoPays.data" v-bind:enter-selected="enterData.whoPays.selected"></Select>
+        <Input placeholder="Price"
+               :enter-data="enterData.price"
+               button-text="₴"
+               type="number"
+               @update="updateComponent"></Input>
+        <Select title="Type"
+                :options="enterData.type.data"
+                :enter-selected="enterData.type.selected"
+                @update="updateComponent"></Select>
+        <Select title="Who pays"
+                :options="enterData.whoPays.data"
+                :enter-selected="enterData.whoPays.selected"
+                @update="updateComponent"></Select>
     </Form>
 </template>
 <script>
@@ -18,6 +28,18 @@ export default defineComponent({
     props: {
         enterData: Object // { price: string, type: { data: [{ id: number, name: string, description?: string }], selected: { id: number, name: string, description?: string }, whoPays: { data: [{ id: number, name: string, description?: string }], selected: { id: number, name: string, description?: string }} }
     },
+    emits: ["update"],
+    methods: {
+        updateComponent(newData, title) {
+            let whichData;
+            switch (title) {
+                case "Price": whichData = "price"; break
+                case "Type": whichData = "type"; break;
+                case "Who pays": whichData = "whoPays"; break;
+            }
+            this.$emit("update", ["billingData", whichData], newData)
+        },
+    }
     
 })
 </script>

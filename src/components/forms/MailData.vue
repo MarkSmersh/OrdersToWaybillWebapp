@@ -3,10 +3,12 @@
         <Select title="Settlement" 
                 :enter-selected="enterData.settlement.selected"
                 :options="enterData.settlement.data"
-                :onInput="searchSettlement"></Select>
+                :onInput="searchSettlement"
+                @update="updateComponent"></Select>
         <Select title="Destination" 
-                :enter-selected="enterData.destination.selected"
-                :options="enterData.destination.data"></Select>
+                :enter-selected="destination.selected"
+                :options="destination.data"
+                @update="updateComponent"></Select>
         <TextBox title="Scan sheet"
                  :enter-data="enterData.scanSheet"></TextBox>
     </Form>
@@ -17,6 +19,7 @@ import { defineComponent } from 'vue';
 import Form from '../Form.vue';
 import Select from '../parts/Select.vue';
 import TextBox from '../parts/TextBox.vue';
+import warehouseTypeToString from '../../utils/warehouseTypeToString';
 
 export default defineComponent({
     props: {
@@ -25,50 +28,77 @@ export default defineComponent({
     },
     data () {
         return {
-            settlement: this.enterData.settlement.selected || ""
+            settlement: this.enterData.settlement.selected || "",
+            destination: this.enterData.destination
         }
     },
+    watch: {
+        enterData(newData) {
+            this.destination = newData.destination;
+        }
+    },
+    emits: ["update"],
     components: {
         Form, Select, TextBox
     },
+
     methods: {
-        updateComponent(newData, title) {
+        async updateComponent(newData, title) {
             let whichData;
             switch (title) {
                 case "Settlement": whichData = "settlement";
-                    this.settlement = newData.name;
+                    this.settlement = newData;
+                    await this.updateWarehouses();
                     break;
                 case "Destination": whichData = "destination"; break;
-                case "Scan sheet": whichData = "scanSheet"; break;
             }
-            this.$emit("update", "mailData", whichData, newData)
+            this.$emit("update", ["mailData", whichData], newData)
         },
-        searchSettlement(name) {
+        async searchSettlement(name) {
             console.log(this.settlement);
-            let settlements = this.request(this.$store.state.token, "Address", "searchSettlements", {
+            let data = []
+            
+            try {
+                let settlements = (await this.request(this.$store.state.token, "Address", "searchSettlements", {
                 CityName: name,
                 Limit: "200"
-            }).Addresses
+                }))[0].Addresses
 
-            let data = []
+                console.log(settlements);
 
-            settlements.forEach((s) => {
-                data.push({
-                    id: s.Ref,
-                    name: `${s.SettlementTypeCode} ${s.MainDescription}`,
-                    description: `${s.ParentRegionCode} ${s.Area}, ${s.RegionTypesCode} ${s.Region}`
+
+                settlements.forEach((s) => {
+                    data.push({
+                        id: s.Ref,
+                        name: `${s.SettlementTypeCode} ${s.MainDescription}`,
+                        description: `${s.ParentRegionCode} ${s.Area}, ${s.RegionTypesCode} ${s.Region}`
+                    })
                 })
-            })
+            } catch {}
 
             return data;
         },
-        updateWarehouses() {
-            console.log(this.settlement);
-            let settlements = this.request(this.$store.state.token, "Address", "getWarehouses", {
-                CityName: name,
-                Limit: "200"
-            }).Addresses
-        }
+        async updateWarehouses() {
+            console.log(this.settlement.id);
+            let warehouses = await this.request(this.$store.state.token, "Address", "getWarehouses", {
+                SettlementRef: this.settlement.id
+            })
+
+            console.log(warehouses);
+
+            let data = []
+
+            warehouses.forEach((w) => {
+                data.push({
+                    id: w.Ref,
+                    name: `${warehouseTypeToString(w.TypeOfWarehouse)} №${w.Number}`,
+                    description: `${w.ShortAddress}`
+                })
+            })
+
+            this.destination.data = data;
+            this.destination.selected = data[0] || {id:0,name:"No warehouses in this settlement",description:""};
+        },
     }
 })
 </script>

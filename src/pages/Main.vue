@@ -1,16 +1,22 @@
 <template>
     <div v-if="status === 200">
       <Link v-if="data.orderData" name="order">
-        <Order :products="data.orderData.data" :enter-basket="data.orderData.basket"></Order>
+        <Order :products="data.orderData.data"
+               :enter-basket="data.orderData.basket"
+               @update="updateData"></Order>
       </Link>
       <Link v-if="data.costumerData" name="costumer-data">
-        <CostumerData :enter-data="data.costumerData"></CostumerData>
+        <CostumerData :enter-data="data.costumerData"
+                      @update="updateData"></CostumerData>
       </Link>
       <Link v-if="data.mailData" name="mail-data">
-        <MailData :enter-data="data.mailData"></MailData>
+        <MailData :enter-data="data.mailData"
+                  :request="requestToNP"
+                  @update="updateData"></MailData>
       </Link>
       <Link v-if="data.billingData" name="billing-data">
-        <BillingData :enter-data="data.billingData"></BillingData>
+        <BillingData :enter-data="data.billingData"
+                     @update="updateData"></BillingData>
       </Link>
     </div>
     <div v-else>
@@ -159,6 +165,7 @@
     data() {
       return {
         data: {},
+        newData: {},
         async requestToNP(token, modelName, calledMethod, data) {
           return (await axios.request({
             url: "https://api.novaposhta.ua/v2.0/json/",
@@ -177,6 +184,23 @@
         },
         status: 200,
         response: ""
+      }
+    },
+    methods: {
+      updateData(query, data) { // array, object
+        let toPath = this.newData;
+
+        for (let i = 0; i < query.length; i++) {
+          if (!toPath[query[i]]) 
+            toPath[query[i]] = {}
+          if (i + 1 !== query.length) {
+            toPath = toPath[query[i]]
+          } else {
+            toPath[query[i]] = data;
+          }
+        }
+
+        console.log(this.newData);
       }
     }
   }

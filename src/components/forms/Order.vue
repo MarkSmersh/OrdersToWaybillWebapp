@@ -5,7 +5,7 @@
                 <li class="product" v-for="product in basket">
                     <p class="title">{{product.name}}</p>
                     <p class="units">{{product.packaging + " " + product.unit}}</p>
-                    <button @click="removeBasket(product)">—</button>
+                    <button @click="removeBasket(product); updateComponents();">—</button>
                 </li>
             </ul>
         </div>
@@ -33,7 +33,7 @@
                         <ul v-bind:class="{ active: product.isOpened }">
                             <li :key="product.id" class="unit" v-for="pack in product.packaging" v-bind:class="{ active: product.isOpened }">
                                 <p class="value">{{pack + " " + product.unit}}</p>
-                                <button @click="addBasket(product, pack)">+</button>
+                                <button @click="addBasket(product, pack); updateComponents();">+</button>
                             </li>
                             <button v-bind:class="{ active: product.isOpened }" @click="product.isOpened = !product.isOpened">{{(product.isOpened) ? "Cancel" : "Add"}}</button>
                         </ul>
@@ -71,6 +71,7 @@ export default defineComponent({
             isActiveList: false
         }
     },
+    emits: ["update"],
     methods: {
         changeState() {
             this.isActiveList = !this.isActiveList;
@@ -95,6 +96,9 @@ export default defineComponent({
         },
         removeBasket(prod) {
             this.basket = this.basket.filter(prd => prd.name !== prod.name);
+        },
+        updateComponents() {
+            this.$emit("update", ["orderData"], this.basket)
         }
     }
 })

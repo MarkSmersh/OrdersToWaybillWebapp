@@ -4,15 +4,16 @@
             <div class="selectedContainer" v-bind:class="{ active: isActived }">
                 <input class="nameInput"
                        :value="value"
-                       @focusin="changeState()"
-                       @input="(onInput) ? Input($event.target.value) : filterByName($event.target.value)">
+                       @focusin="changeState(); (onInput != undefined) ? Input($event.target.value) : filterByName($event.target.value)"
+                       @input="(onInput != undefined) ? Input($event.target.value) : filterByName($event.target.value)">
                 <p class="sign" v-bind:class="{ active: isActived }">></p>
             </div>
             <ul class="options" v-bind:class="{ active: isActived }" >
-                <li class="option" v-for="option in filtered" :key="option.id" @click="applyOption(option)">
+                <li class="option" v-if="filtered.length != 0" v-for="option in filtered" :key="option.id" @click="applyOption(option)">
                     <p class="name">{{option.name}}</p>
                     <p class="description">{{option.description}} </p>
                 </li>
+                <p v-else>Nothing found</p>
             </ul>
         </div>
 </template>
@@ -25,27 +26,24 @@ export default defineComponent({
         title: String,
         options: Array, // { id: number, name: string, description?: string }
         enterSelected: Object,
-        onInput: Function,
-        // enterFilter: String, // e.g. settlementRef 
-        // onFilter: Function,
+        onInput: Function || undefined,
     },
     data() {
         return {
             selected: this.enterSelected,
             value: this.enterSelected.name,
             filtered: this.options,
-            filter: this.filter,
             isActived: false
         }
     },
     watch: {
         options(newOptions) {
             this.filtered = newOptions;
+        },
+        enterSelected(newSelected) {
+            this.selected = newSelected;
+            this.value = newSelected.name;
         }
-        // async filter(newFilter) {
-        //     this.filtered = await this.onFilter(newFilter);
-        //     this.filter = newFilter;
-        // }
     },
     methods: {
         changeState () {
@@ -54,7 +52,7 @@ export default defineComponent({
         applyOption (e) {
             this.selected = e;
             this.value = e.name;
-            this.$emit("update", this.value);
+            this.$emit("update", this.selected, this.title);
             this.changeState();
         },
         filterByName (val) {
@@ -69,6 +67,7 @@ export default defineComponent({
             this.filtered = [...filtered]
         },
         async Input(e) {
+            this.value = e;
             this.filtered = await this.onInput(e);
         },
     }
@@ -115,7 +114,7 @@ export default defineComponent({
         display: none;
         overflow-y: auto;
         min-height: calc(50px - calc(var(--default-border-radius) * 2));;
-        max-height: 250px;
+        max-height: 400px;
         padding: var(--default-border-radius);
         width: calc(100% - calc(var(--default-border-radius) * 2));
     }
