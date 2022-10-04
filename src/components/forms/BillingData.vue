@@ -17,7 +17,8 @@ export default defineComponent({
     },
     props: {
         enterData: Object // { price: string, type: { data: [{ id: number, name: string, description?: string }], selected: { id: number, name: string, description?: string }, whoPays: { data: [{ id: number, name: string, description?: string }], selected: { id: number, name: string, description?: string }} }
-    }
+    },
+    
 })
 </script>
 <style scoped>

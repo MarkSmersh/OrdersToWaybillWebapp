@@ -37,6 +37,7 @@
       if (this.$route.path === "/create") {
         if (!token) {
           this.emitError(400, "Option token is missing, but required");
+          return;
         }
       }
 
@@ -45,7 +46,10 @@
         console.log(token);
         if (!token) {
           this.emitError(400, "Option token is missing, but required");
+          return;
         }
+
+        this.$store.commit("updateToken", token);
 
         if (orderData) {
           orderData = JSON.parse(orderData);
