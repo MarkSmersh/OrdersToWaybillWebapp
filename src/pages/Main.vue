@@ -88,7 +88,8 @@
             basket.push({
               name: product.name,
               packaging: prd.packaging,
-              unit: product.unit
+              unit: product.unit,
+              amount: prd.amount
             })
           })
 

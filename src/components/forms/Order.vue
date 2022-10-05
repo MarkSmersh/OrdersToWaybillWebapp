@@ -5,6 +5,7 @@
                 <li class="product" v-for="product in basket">
                     <p class="title">{{product.name}}</p>
                     <p class="units">{{product.packaging + " " + product.unit}}</p>
+                    <p class="amount">x{{product.amount}}</p>
                     <button @click="removeBasket(product); updateComponents();">—</button>
                 </li>
             </ul>
@@ -31,7 +32,7 @@
                             </svg>
                         </div>
                         <ul v-bind:class="{ active: product.isOpened }">
-                            <li :key="product.id" class="unit" v-for="pack in product.packaging" v-bind:class="{ active: product.isOpened }">
+                            <li :key="product.id" class="unit" v-for="pack in Object.keys(product.packaging)" v-bind:class="{ active: product.isOpened }">
                                 <p class="value">{{pack + " " + product.unit}}</p>
                                 <button @click="addBasket(product, pack); updateComponents();">+</button>
                             </li>
@@ -53,12 +54,12 @@ export default defineComponent({
         Form
     },
     props: {
-        products: Array, // { id: number, name: string, type: string, packaging: number[], unit: string, img: string, isOpened: boolean  }
-        enterBasket: Array
+        products: Array, // { id: number, name: string, type: string, packaging: { $number: $price }, unit: string, img: string, isOpened: boolean  }
+        enterBasket: Array // [ { name: string, packaging: number, amount: number, unit: string } ]
     },
     data() {
         return {
-            basket: this.enterBasket || [], // [ { name: string, packaging: number, unit: string } ]
+            basket: this.enterBasket || [],
             filtered: this.products || [],
             filters: (() => {
                 if (!this.products) return;
@@ -87,15 +88,15 @@ export default defineComponent({
             this.filtered = result;
         },
         addBasket(prod, pack) {
-            let product = this.basket.find((prd) => prd.name == prod.name);
+            let product = this.basket.find((prd) => prd.name == prod.name && prd.packaging == pack);
             if(product == undefined) {
-                this.basket.push({ name: prod.name, packaging: 0, unit: prod.unit });
-                product = this.basket.find((prd) => prd.name == prod.name);
+                this.basket.push({ name: prod.name, packaging: pack, unit: prod.unit, amount: 0 });
+                product = this.basket.find((prd) => prd.name == prod.name && prd.packaging == pack);
             }
-            product.packaging += pack;
+            product.amount++
         },
         removeBasket(prod) {
-            this.basket = this.basket.filter(prd => prd.name !== prod.name);
+            this.basket = this.basket.filter(prd => prd.name !== prod.name && prd.packaging !== prod.packaging);
         },
         updateComponents() {
             this.$emit("update", ["orderData"], this.basket)
@@ -134,6 +135,7 @@ export default defineComponent({
 
     .basket > ul, .choice > ul {
         display: flex;
+        flex-direction: row;
         list-style-type: none;
     }
 
@@ -175,6 +177,14 @@ export default defineComponent({
         float: right;
         color: var(--tg-theme-button-text-color);
         cursor: pointer;
+        display: inline;
+    }
+
+    .basket .product .amount {
+        display: inline-block;
+        margin-top: 10px;
+        color: var(--tg-theme-link-color);
+        font-weight: 700;
     }
 
     /*filter*/
