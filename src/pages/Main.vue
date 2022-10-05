@@ -7,7 +7,8 @@
       </Link>
       <Link v-if="data.costumerData" name="costumer-data">
         <CostumerData :enter-data="data.costumerData"
-                      @update="updateData"></CostumerData>
+                      @update="updateData"
+                      :request="requestToNP"></CostumerData>
       </Link>
       <Link v-if="data.mailData" name="mail-data">
         <MailData :enter-data="data.mailData"
@@ -41,10 +42,18 @@
     },
     async mounted() {
       if (this.$route.path === "/create") {
+        let { token, orderData } = this.$route.query;
         if (!token) {
           this.emitError(400, "Option token is missing, but required");
           return;
         }
+
+        if (!orderData) {
+          this.emitError(400, "Option orderData is missing, but required");
+          return;
+        }
+
+        this.data
       }
 
       if (this.$route.path === "/edit") {

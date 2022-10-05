@@ -26,6 +26,12 @@ export default defineComponent({
             isEdited: false,
         }
     },
+    watch: {
+        enterData(newData) {
+            this.data = newData;
+            this.inputData = newData;
+        }
+    },
     methods: {
         applyInput() {
             if (this.isEdited) {
