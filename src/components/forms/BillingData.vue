@@ -1,10 +1,5 @@
 <template>
     <Form title="Billing data">
-        <Input placeholder="Price"
-               :enter-data="enterData.price"
-               button-text="₴"
-               type="number"
-               @update="updateComponent"></Input>
         <Select title="Type"
                 :options="enterData.type.data"
                 :enter-selected="enterData.type.selected"

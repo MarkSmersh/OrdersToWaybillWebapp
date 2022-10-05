@@ -3,6 +3,7 @@
       <Link v-if="data.orderData" name="order">
         <Order :products="data.orderData.data"
                :enter-basket="data.orderData.basket"
+               :enter-price="data.orderData.price"
                @update="updateData"></Order>
       </Link>
       <Link v-if="data.costumerData" name="costumer-data">
@@ -95,7 +96,8 @@
 
           this.data.orderData = {
             data: data,
-            basket: basket
+            basket: basket,
+            price: orderData.price
           }
         }
 
@@ -165,7 +167,6 @@
           this.data.billingData = {
             type: fromRawData(billingData.type),
             whoPays: fromRawData(billingData.whoPays),
-            price: billingData.price
           }
 
           console.log(this.data.billingData);

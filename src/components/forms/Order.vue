@@ -1,12 +1,12 @@
 <template>
     <Form title="Order">
-        <div class="basket" v-if="basket.length != 0">
+            <div class="basket" v-if="basket.length != 0">
             <ul>
                 <li class="product" v-for="product in basket">
                     <p class="title">{{product.name}}</p>
                     <p class="units">{{product.packaging + " " + product.unit}}</p>
                     <p class="amount">x{{product.amount}}</p>
-                    <button @click="removeBasket(product); updateComponents();">—</button>
+                    <button @click="removeBasket(product)">—</button>
                 </li>
             </ul>
         </div>
@@ -34,7 +34,7 @@
                         <ul v-bind:class="{ active: product.isOpened }">
                             <li :key="product.id" class="unit" v-for="pack in Object.keys(product.packaging)" v-bind:class="{ active: product.isOpened }">
                                 <p class="value">{{pack + " " + product.unit}}</p>
-                                <button @click="addBasket(product, pack); updateComponents();">+</button>
+                                <button @click="addBasket(product, pack);">+</button>
                             </li>
                             <button v-bind:class="{ active: product.isOpened }" @click="product.isOpened = !product.isOpened">{{(product.isOpened) ? "Cancel" : "Add"}}</button>
                         </ul>
@@ -42,20 +42,27 @@
                 </ul>
             </div>
         </div>
+    <Input placeholder="Price"
+           :enter-data="price"
+           button-text="₴"
+           type="number"
+           @update="updateComponents"></Input>    
     </Form>
 </template>
 
 <script>
 import Form from '../Form.vue';
 import { defineComponent } from 'vue';
+import Input from '../parts/Input.vue';
 
 export default defineComponent({
     components: {
-        Form
+        Form, Input
     },
     props: {
         products: Array, // { id: number, name: string, type: string, packaging: { $number: $price }, unit: string, img: string, isOpened: boolean  }
-        enterBasket: Array // [ { name: string, packaging: number, amount: number, unit: string } ]
+        enterBasket: Array, // [ { name: string, packaging: number, amount: number, unit: string } ],
+        enterPrice: String
     },
     data() {
         return {
@@ -69,6 +76,7 @@ export default defineComponent({
                 })
                 return result;
             })(),
+            price: this.enterPrice,
             isActiveList: false
         }
     },
@@ -93,14 +101,33 @@ export default defineComponent({
                 this.basket.push({ name: prod.name, packaging: pack, unit: prod.unit, amount: 0 });
                 product = this.basket.find((prd) => prd.name == prod.name && prd.packaging == pack);
             }
-            product.amount++
+            product.amount++;
+            this.updateComponents();
         },
         removeBasket(prod) {
             this.basket = this.basket.filter(prd => prd.name !== prod.name && prd.packaging !== prod.packaging);
+            this.updateComponents();
         },
-        updateComponents() {
-            this.$emit("update", ["orderData"], this.basket)
-        }
+        updateComponents(data, title) {
+            let path = title ? title : this.basket;
+            if (this.basket)
+                this.calculatePrice()
+            this.$emit("update", ["orderData", title ? title : path], this.basket);
+        },
+        calculatePrice() {
+            let price = 0;
+
+            this.basket.forEach((b) => {
+                let product = this.filtered.find((p) => p.name === b.name);
+                console.log(product);
+                console.log(product.packaging[b.packaging] * b.amount);
+                // console.log(b.packaging);
+                // console.log(b.amount);
+                price += product.packaging[b.packaging] * b.amount;
+            })
+
+            this.price = price.toString();
+        },
     }
 })
 </script>
