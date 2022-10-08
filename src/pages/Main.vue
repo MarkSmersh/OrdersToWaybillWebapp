@@ -36,6 +36,7 @@
   import TextBox from "@/components/parts/TextBox.vue";
   import axios from "axios";
   import warehouseTypeToString from "../utils/warehouseTypeToString";
+  const WebApp = window.Telegram.WebApp;
   
   export default {
     components: {
@@ -171,7 +172,12 @@
 
           console.log(this.data.billingData);
         }
-      }      
+        WebApp.MainButton.setText("Save");
+      }
+
+      WebApp.ready();
+
+      WebApp.MainButton.show();
     },
     data() {
       return {

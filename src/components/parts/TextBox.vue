@@ -30,6 +30,7 @@ export default defineComponent ({
         font-size: 1em;
         font-weight: 700;
         margin-bottom: 5px;
+        color: var(--tg-theme-text-color);
     }
 
     .text-box {
@@ -43,6 +44,10 @@ export default defineComponent ({
         justify-content: space-between;
         align-items: center;
         margin-top: 5px;
+    }
+
+    .text-box .text{
+        color: var(--tg-theme-text-color);
     }
 
     button {

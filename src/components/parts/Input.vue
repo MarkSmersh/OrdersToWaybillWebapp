@@ -83,6 +83,7 @@ export default defineComponent({
         width: 100%;
         font-size: 1em;
         font-weight: 500;
+        color: var(--tg-theme-text-color);
     }
 
     button {

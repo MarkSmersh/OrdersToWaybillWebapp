@@ -22,6 +22,7 @@ export default defineComponent({
         font-size: 2em;
         text-align: center;
         margin-bottom: 30px;
+        color: var(--tg-theme-text-color);
     }
 
     .form > * {

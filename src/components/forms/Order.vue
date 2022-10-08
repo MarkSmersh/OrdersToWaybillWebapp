@@ -142,6 +142,7 @@ export default defineComponent({
         font-size: 1em;
         width: 100%;
         text-align: center;
+        color: var(--tg-theme-text-color);
     }
 
     .basket::-webkit-scrollbar {
@@ -188,11 +189,13 @@ export default defineComponent({
     .basket .product .title {
         font-weight: 700;
         font-size: 1em;
+        color: var(--tg-theme-text-color);
     }
 
     .basket .product .units {
         font-weight: 500;
         font-size: 1em;
+        color: var(--tg-theme-text-color);
     }
 
     .basket .product button {
@@ -229,6 +232,7 @@ export default defineComponent({
         font-size: 1.5em;
         margin-bottom: 5px;
         font-weight: 700;
+        color: var(--tg-theme-text-color);
     }
 
     .head .sign {
@@ -319,6 +323,7 @@ export default defineComponent({
     .product .preview .title {
         justify-self: start;
         margin-bottom: auto;
+        color: var(--tg-theme-text-color);
     }
 
     .product .preview img {

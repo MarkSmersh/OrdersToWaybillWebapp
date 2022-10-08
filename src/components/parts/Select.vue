@@ -13,7 +13,7 @@
                     <p class="name">{{option.name}}</p>
                     <p class="description">{{option.description}} </p>
                 </li>
-                <p v-else>Nothing found</p>
+                <p v-else class="nothing">Nothing found</p>
             </ul>
         </div>
 </template>
@@ -91,6 +91,7 @@ export default defineComponent({
         font-size: 1em;
         font-weight: 700;
         margin-bottom: 5px;
+        color: var(--tg-theme-text-color);
     }
 
     .selectedContainer, .options {
@@ -149,7 +150,7 @@ export default defineComponent({
     }
 
     .nameInput {
-        color: var(--tg-theme-text-color);
+        background-color: transparent;
         width: 100%;
         min-height: calc(50px - 4px);
         border-radius: var(--default-border-radius);
@@ -181,6 +182,7 @@ export default defineComponent({
         transition: 0.2s;
         margin-right: var(--default-border-radius);
         margin-left: var(--default-border-radius);
+        color: var(--tg-theme-text-color);
     }
 
     .sign.active {
@@ -190,6 +192,10 @@ export default defineComponent({
     .option:hover > p{
         text-decoration: underline;
         cursor: pointer;
+    }
+
+    .options .nothing {
+        color: var(--tg-theme-text-color);
     }
 
 </style>
