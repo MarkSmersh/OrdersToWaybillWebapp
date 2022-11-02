@@ -285,29 +285,30 @@
       }
     },
     methods: {
-      // updateData(query, data) { // array, object
-      //   let toPath = this.newData;
-
-      //   console.log(query);
-      //   console.log(data);
-
-      //   console.log(this.newData);
-      // },
       async sendData() {
-        // let {orderData, costumerData, mailData, billingData} = this.newData;
-        // console.log(true);
-        // console.log("falseeeee")
 
         async function showAlertArg(arg: string) {
           await WebApp.showAlert(`Seems you haven\`t fill "${arg}" block`);
         }
 
-        // console.log(this.newData);
-
         try {
-          let data = {};
-
+          let data = this.$store.state.newData as DataToSend;
           
+          if (!data.basket) showAlertArg("Basket")
+          if (!data.price) showAlertArg("Price")
+          if (!data.phoneNumber) showAlertArg("Phone number")
+          if (!data.lastName) showAlertArg("Last name")
+          if (!data.firstName) showAlertArg("First name")
+          if (!data.middleName) showAlertArg("Middle name")
+          if (!data.settlement) showAlertArg("Settlement")
+          if (!data.destination) showAlertArg("Destination")
+          if (!data.type) showAlertArg("Type")
+          if (!data.whoPays) showAlertArg("Who pays")
+          
+          // if (!data.scanSheet) showAlertArg("Scan sheet")
+
+          WebApp.sendData(JSON.stringify(data));
+
         } catch (e) {
           console.log(e);
         }

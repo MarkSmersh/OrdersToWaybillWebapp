@@ -338,6 +338,7 @@ export default defineComponent({
         justify-self: start;
         margin-bottom: auto;
         color: var(--tg-theme-text-color);
+        text-align: center;
     }
 
     .product .preview img {

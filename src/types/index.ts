@@ -200,7 +200,7 @@ export interface WebApp {
     ready: () => Promise<void>,
     onEvent: (eventType: WebAppEvents, eventHandler: () => void) => void,
     offEvent: (eventType: WebAppEvents, eventHandler: () => void) => void,
-    sendData: (data: DataToSend) => void,
+    sendData: (data: string) => void,
     showAlert: (message: string, callback?: () => void) => Promise<void>
 }
 
