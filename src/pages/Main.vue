@@ -236,6 +236,20 @@
           }
         }
 
+        this.$store.commit("setData", {
+          basket: this.data.orderData?.basket,
+          price: this.data.orderData?.price,
+          phoneNumber: this.data.costumerData?.phoneNumber,
+          lastName: this.data.costumerData?.lastName,
+          firstName: this.data.costumerData?.firstName,
+          middleName: this.data.costumerData?.middleName,
+          settlement: this.data.mailData?.settlement,
+          destination: this.data.mailData?.destination,
+          scanSheet: this.data.mailData?.scanSheet,
+          type: this.data.billingData?.type,
+          whoPays: this.data.billingData?.whoPays
+        })
+
         WebApp.MainButton.setText("Apply");
       }
 

@@ -28,6 +28,8 @@ export default createStore({
                 delete state.newData[incData.key];
             }
         },
-
+        setData (state, data: Record<keyof DataToSend, DataToSend[keyof DataToSend]>) {
+            state.newData = data;
+        }
     }
 })
