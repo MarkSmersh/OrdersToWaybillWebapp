@@ -25,7 +25,7 @@
   import TextBox from "@/components/parts/TextBox.vue";
   import axios from "axios";
   import warehouseTypeToString from "../utils/warehouseTypeToString";
-  import type { DataToSend, MainData, Query, OrderData, CostumerData as TCostumerData, BillingData as TBillingData, MailData as TMailData, SelectData } from "@/types";
+  import type { DataToSend, MainData, Query, OrderData } from "@/types";
   const WebApp = window.Telegram.WebApp;
   
   export default {
@@ -37,10 +37,12 @@
         console.log(this.$route);
         const { token, orderData } = this.$route.query as { token: string, orderData: string };
         if (token) {
+          console.log(token);
           // this.emitError(400, "Option token is missing, but required");
           this.$store.commit("updateToken", token);
-          return;
         }
+
+        console.log("ok");
 
         if (!orderData) {
           this.emitError(400, "Option orderData is missing, but required");
@@ -294,16 +296,16 @@
         try {
           let data = this.$store.state.newData as DataToSend;
           
-          if (!data.basket) showAlertArg("Basket")
-          if (!data.price) showAlertArg("Price")
-          if (!data.phoneNumber) showAlertArg("Phone number")
-          if (!data.lastName) showAlertArg("Last name")
-          if (!data.firstName) showAlertArg("First name")
-          if (!data.middleName) showAlertArg("Middle name")
-          if (!data.settlement) showAlertArg("Settlement")
-          if (!data.destination) showAlertArg("Destination")
-          if (!data.type) showAlertArg("Type")
-          if (!data.whoPays) showAlertArg("Who pays")
+          if (!data.basket) return await showAlertArg("Basket");
+          if (!data.price) return await showAlertArg("Price")
+          if (!data.phoneNumber) return await showAlertArg("Phone number")
+          if (!data.lastName) return await showAlertArg("Last name")
+          if (!data.firstName) return await showAlertArg("First name")
+          if (!data.middleName) return await showAlertArg("Middle name")
+          if (!data.settlement) return await showAlertArg("Settlement")
+          if (!data.destination) return await showAlertArg("Destination")
+          if (!data.type) return await showAlertArg("Type")
+          if (!data.whoPays) return await showAlertArg("Who pays")
           
           // if (!data.scanSheet) showAlertArg("Scan sheet")
 

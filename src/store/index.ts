@@ -3,12 +3,13 @@ import { type DataToSend, PropToName } from "@/types";
 
 export default createStore({
     state: {
-        token: "",
+        token: null as null | string,
         newData: {} as Record<keyof DataToSend, DataToSend[keyof DataToSend]>,
         dataChanges: {} as Record<keyof DataToSend, { name: string, data: DataToSend[keyof DataToSend] }>
     },
     mutations: {
         updateToken(state, newToken: string) {
+            console.log("nt");
             state.token = newToken;
         },
         updateData(state, incData: { key: keyof DataToSend, data: DataToSend[keyof DataToSend] }) {

@@ -20,7 +20,7 @@ import Form from '../Form.vue';
 import Select from '../parts/Select.vue';
 import TextBox from '../parts/TextBox.vue';
 import warehouseTypeToString from '../../utils/warehouseTypeToString';
-import type { MailData, PropToName, AddressGetWarehousesResponse, SelectForm, AddressSearchSettlements } from '@/types';
+import type { MailData, PropToName, AddressGetWarehousesResponse, SelectForm, AddressSearchSettlements, SelectData } from '@/types';
 import { nameToProp } from '@/utils/nameToProp';
 
 export default defineComponent({
@@ -45,7 +45,6 @@ export default defineComponent({
             this.destination = newData.destination;
         }
     },
-    emits: ["update"],
     components: {
         Form, Select, TextBox
     },
@@ -105,6 +104,8 @@ export default defineComponent({
 
             this.destination.data = data;
             this.destination.selected = data[0] || {};
+
+            this.updateComponent(this.destination.selected as SelectData, "Destination");
         },
     }
 })

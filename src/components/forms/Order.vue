@@ -83,7 +83,6 @@ export default defineComponent({
             isActiveList: false
         }
     },
-    emits: ["update"],
     methods: {
         changeState() {
             this.isActiveList = !this.isActiveList;

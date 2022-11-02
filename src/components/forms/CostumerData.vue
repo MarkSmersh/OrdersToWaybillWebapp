@@ -56,7 +56,6 @@ export default defineComponent({
             this.data = newData;
         }
     },
-    emits: ["update"],
     methods: {
         updateComponent(newData: CostumerData[keyof CostumerData], title: typeof PropToName[keyof typeof PropToName]) {
             console.log(title);
