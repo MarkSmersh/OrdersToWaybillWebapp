@@ -26,6 +26,8 @@
   import axios from "axios";
   import warehouseTypeToString from "../utils/warehouseTypeToString";
   import type { DataToSend, MainData, Query, OrderData } from "@/types";
+  import { fromRawData } from "../utils/fromRawData"
+
   const WebApp = window.Telegram.WebApp;
   
   export default {
@@ -125,10 +127,10 @@
       if (this.$route.path === "/edit") {
         const { token, orderData, costumerData, mailData, billingData } = this.$route.query as { token: string, orderData: string, costumerData: string, mailData: string, billingData: string }
         console.log(token);
-        if (!token) {
-          this.emitError(400, "Option token is missing, but required");
-          return;
-        }
+        // if (!token) {
+        //   this.emitError(400, "Option token is missing, but required");
+        //   return;
+        // }
 
         this.$store.commit("updateToken", token);
 
@@ -177,8 +179,11 @@
         if (mailData) {
           let MailData = JSON.parse(mailData) as Query["mailData"];
 
+          console.log(this.$store.state.token);
+          console.log(MailData.settlement);
+
           let responseSettlement = (await this.requestToNP(
-            token, "Address", "getSettlements", {
+            this.$store.state.token, "Address", "getSettlements", {
               "Ref": MailData.settlement.selected
           }))[0]
           console.log(responseSettlement.AreaDescription);
@@ -190,7 +195,7 @@
           }};
 
           let responseWarehouse = (await this.requestToNP(
-            token, "Address", "getWarehouses", {
+            this.$store.state.token, "Address", "getWarehouses", {
               "Ref": MailData.destination.selected
           }))[0]
           console.log(responseWarehouse);
@@ -210,28 +215,8 @@
         if (billingData) {
           let BillingData = JSON.parse(billingData) as Query["billingData"];
 
-          function fromRawData (raw: Query["billingData"][keyof Query["billingData"]]) {
-            let data = [] as { id: number | string, name: string }[];
-            raw.data.forEach((d, i) => {
-              data.push({
-                id: i,
-                name: d
-              })
-            })
+          console.log(billingData);
 
-            let selectData = data.find((v) => v.id == raw.selected) as { id: number | string, name: string };
-            
-            console.log(selectData);
-
-            return {
-              data: data,
-              selected: {
-                id: selectData.id,
-                name: selectData.name
-              }
-            } 
-          }
-          
           this.data.billingData = {
             type: fromRawData(BillingData.type),
             whoPays: fromRawData(BillingData.whoPays),
